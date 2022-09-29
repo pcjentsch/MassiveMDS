@@ -491,7 +491,8 @@ hmcsampler <- function(n_iter,
                        treeCov=TRUE,                 # if treeCov=TRUE, tree-based nxn precision used
                        truncation=TRUE,
                        gpu=0,
-                       single=0) {
+                       single=0,
+                       locations=NULL) {
 
   # Check availability of SIMD  TODO Move into hidden function
   if (simd > 0) {
@@ -544,8 +545,9 @@ hmcsampler <- function(n_iter,
     beast$d0       <- P
     beast$traitT0  <- diag(P)
     set.seed(666)
-    locations <- matrix(rnorm(N * P, 0, 1), nrow = N, ncol = P)
-
+    if (is.null(locations)){
+      locations <- matrix(rnorm(N * P, 0, 1), nrow = N, ncol = P)
+    }
   }
 
   # Build reusable object to compute Loglikelihood (gradient)
